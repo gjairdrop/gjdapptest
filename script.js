@@ -2,7 +2,7 @@ const mainnetChainId = '0x38'; // BNB Mainnet
 const testnetChainId = '0x61'; // BNB Testnet
 
 const contractAddress = '0x0F32BE2D324D8a7a93cb8224f02Cbb3Aa9117d80'; // Thay bằng địa chỉ hợp đồng của bạn
-const abi = [[
+const abi = [ [
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -417,13 +417,13 @@ const abi = [[
 		"stateMutability": "nonpayable",
 		"type": "function"
 	}
-]];
+] ];
 
 let web3;
 let contract;
 let userAccount;
 
-async function init() {
+async function connectWallet() {
     if (window.ethereum) {
         web3 = new Web3(window.ethereum);
         await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -436,9 +436,8 @@ async function init() {
 
         userAccount = (await web3.eth.getAccounts())[0];
         document.getElementById('wallet-info').innerText = `Kết nối ví: ${userAccount}`;
-        contract = new web3.eth.Contract(abi, contractAddress);
     } else {
-        alert('Please install MetaMask!');
+        alert('Vui lòng cài đặt MetaMask!');
     }
 }
 
@@ -450,6 +449,7 @@ async function mintGJTokens() {
     }
 
     try {
+        contract = new web3.eth.Contract(abi, contractAddress);
         await contract.methods.mintGJTokens().send({
             from: userAccount,
             value: web3.utils.toWei(bnbAmount, 'ether')
@@ -463,6 +463,7 @@ async function mintGJTokens() {
 
 async function withdraw() {
     try {
+        contract = new web3.eth.Contract(abi, contractAddress);
         await contract.methods.withdraw().send({ from: userAccount });
         alert('Rút BNB thành công!');
     } catch (error) {
@@ -471,7 +472,8 @@ async function withdraw() {
     }
 }
 
+document.getElementById('connectButton').onclick = connectWallet;
 document.getElementById('mintButton').onclick = mintGJTokens;
 document.getElementById('withdrawButton').onclick = withdraw;
 
-window.onload = init;
+window.onload = connectWallet; // Kết nối ví khi tải trang

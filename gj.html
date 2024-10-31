@@ -4,16 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GJ Token DApp</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Mint GJ Token</h1>
-        <div id="wallet-info"></div>
-        <input type="text" id="bnbAmount" placeholder="Số BNB để gửi" />
-        <button id="mintButton">Mint GJ Tokens</button>
-        <button id="withdrawButton">Rút BNB</button>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">GJ Token</a>
+    </nav>
+    <div class="container mt-5">
+        <h1 class="text-center">Mint GJ Token</h1>
+        <div id="wallet-info" class="alert alert-info" role="alert"></div>
+        
+        <div class="form-group">
+            <label for="bnbAmount">Số BNB để gửi:</label>
+            <input type="text" id="bnbAmount" class="form-control" placeholder="Nhập số BNB" />
+        </div>
+        
+        <button id="connectButton" class="btn btn-success btn-block">Kết nối ví</button>
+        <button id="mintButton" class="btn btn-primary btn-block mt-2">Mint GJ Tokens</button>
+        <button id="withdrawButton" class="btn btn-danger btn-block mt-2">Rút BNB</button>
     </div>
+    <footer class="text-center mt-4">
+        <p>&copy; 2024 GJ Token. Tất cả quyền được bảo lưu.</p>
+    </footer>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
     <script src="script.js"></script>
 </body>
