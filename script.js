@@ -14,14 +14,28 @@ function renderCart() {
     cartItems.innerHTML = '';
     let totalPrice = 0;
 
-    cart.forEach(item => {
+    cart.forEach((item, index) => {
         const li = document.createElement('li');
         li.textContent = `${item.service}: ${item.price.toLocaleString()} VNĐ`;
+        
+        // Thêm nút xóa
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Xóa';
+        deleteButton.onclick = () => removeFromCart(index);
+        
+        li.appendChild(deleteButton);
         cartItems.appendChild(li);
         totalPrice += item.price;
     });
 
     total.textContent = `Tổng cộng: ${totalPrice.toLocaleString()} VNĐ`;
+}
+
+// Xóa sản phẩm khỏi giỏ hàng
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    renderCart();
+    showNotification(`Sản phẩm đã được xóa khỏi giỏ hàng!`);
 }
 
 // Chuyển hướng đến trang thanh toán
@@ -54,9 +68,15 @@ document.addEventListener("DOMContentLoaded", function() {
     const cartItems = document.getElementById('cart-items');
     const total = document.getElementById('total');
 
-    storedCart.forEach(item => {
+    storedCart.forEach((item, index) => {
         const li = document.createElement('li');
         li.textContent = `${item.service}: ${item.price.toLocaleString()} VNĐ`;
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Xóa';
+        deleteButton.onclick = () => removeFromCart(index);
+        
+        li.appendChild(deleteButton);
         cartItems.appendChild(li);
     });
 
