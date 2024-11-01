@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Thông Tin Thanh Toán</h1>
+    </header>
+    <main>
+        <section id="payment-info">
+            <h2>Cảm ơn bạn đã chọn dịch vụ của chúng tôi!</h2>
+            <img src="./img/photo_6136481769256501197_x.jpg" alt="QR" />
+            <p>Vui lòng kiểm tra thông tin thanh toán của bạn dưới đây:</p>
+            <ul id="cart-items"></ul>
+            <p id="total"></p>
+            <p>Nội dung thanh toán: Username Telegram</p>
+            
+            <h3>Tải Lên Hình Ảnh</h3>
+            <input type="file" id="imageUpload" accept="image/*">
+            <button onclick="uploadImage()">Tải Ảnh Lên</button>
+            <div id="uploadedImageContainer"></div>
+
+            <button onclick="completePayment()">Hoàn Tất Thanh Toán</button>
+            <button onclick="goBack()">Quay Lại</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Dịch Vụ Mua Bán Sao Telegram. Tất cả quyền lợi được bảo lưu.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

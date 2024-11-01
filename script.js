@@ -1,479 +1,143 @@
-const mainnetChainId = '0x38'; // BNB Mainnet
-const testnetChainId = '0x61'; // BNB Testnet
+let cart = [];
 
-const contractAddress = '0x0F32BE2D324D8a7a93cb8224f02Cbb3Aa9117d80'; // Thay bằng địa chỉ hợp đồng của bạn
-const abi = [ [
-	{
-		"inputs": [],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "spender",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "allowance",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "needed",
-				"type": "uint256"
-			}
-		],
-		"name": "ERC20InsufficientAllowance",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "sender",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "balance",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "needed",
-				"type": "uint256"
-			}
-		],
-		"name": "ERC20InsufficientBalance",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "approver",
-				"type": "address"
-			}
-		],
-		"name": "ERC20InvalidApprover",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "receiver",
-				"type": "address"
-			}
-		],
-		"name": "ERC20InvalidReceiver",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "sender",
-				"type": "address"
-			}
-		],
-		"name": "ERC20InvalidSender",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "spender",
-				"type": "address"
-			}
-		],
-		"name": "ERC20InvalidSpender",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			}
-		],
-		"name": "OwnableInvalidOwner",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "OwnableUnauthorizedAccount",
-		"type": "error"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "spender",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			}
-		],
-		"name": "Approval",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "previousOwner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "OwnershipTransferred",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			}
-		],
-		"name": "Transfer",
-		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "spender",
-				"type": "address"
-			}
-		],
-		"name": "allowance",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "spender",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			}
-		],
-		"name": "approve",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "balanceOf",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "decimals",
-		"outputs": [
-			{
-				"internalType": "uint8",
-				"name": "",
-				"type": "uint8"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "mintGJTokens",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "name",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "rate",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "symbol",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "totalSupply",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			}
-		],
-		"name": "transfer",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			}
-		],
-		"name": "transferFrom",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "withdraw",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	}
-] ];
-
-let web3;
-let contract;
-let userAccount;
-
-async function connectWallet() {
-    if (window.ethereum) {
-        web3 = new Web3(window.ethereum);
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
-
-        const chainId = await web3.eth.getChainId();
-        if (chainId !== parseInt(mainnetChainId, 16) && chainId !== parseInt(testnetChainId, 16)) {
-            alert('Vui lòng chuyển đến BNB Mainnet hoặc Testnet');
-            return;
-        }
-
-        userAccount = (await web3.eth.getAccounts())[0];
-        document.getElementById('wallet-info').innerText = `Kết nối ví: ${userAccount}`;
-    } else {
-        alert('Vui lòng cài đặt MetaMask!');
-    }
+// Thêm sản phẩm vào giỏ hàng
+function addToCart(service, price) {
+    cart.push({ service, price });
+    renderCart();
+    showNotification(`${service} đã được thêm vào giỏ hàng!`);
 }
 
-async function mintGJTokens() {
-    const bnbAmount = document.getElementById('bnbAmount').value;
-    if (!bnbAmount || isNaN(bnbAmount) || parseFloat(bnbAmount) <= 0) {
-        alert('Vui lòng nhập số BNB hợp lệ!');
+// Hiển thị nội dung giỏ hàng
+function renderCart() {
+    const cartItems = document.getElementById('cart-items');
+    const total = document.getElementById('total');
+    cartItems.innerHTML = '';
+    let totalPrice = 0;
+
+    cart.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.service}: ${item.price.toLocaleString()} VNĐ`;
+        cartItems.appendChild(li);
+        totalPrice += item.price;
+    });
+
+    total.textContent = `Tổng cộng: ${totalPrice.toLocaleString()} VNĐ`;
+}
+
+// Chuyển hướng đến trang thanh toán
+function checkout() {
+    if (cart.length === 0) {
+        alert("Giỏ hàng của bạn trống!");
         return;
     }
 
-    try {
-        contract = new web3.eth.Contract(abi, contractAddress);
-        await contract.methods.mintGJTokens().send({
-            from: userAccount,
-            value: web3.utils.toWei(bnbAmount, 'ether')
-        });
-        alert('Mint thành công!');
-    } catch (error) {
-        console.error(error);
-        alert('Lỗi khi mint token!');
+    localStorage.setItem('cart', JSON.stringify(cart));
+    localStorage.setItem('totalPrice', cart.reduce((acc, item) => acc + item.price, 0));
+
+    window.location.href = 'pay.html';
+}
+
+// Hoàn tất thanh toán
+function completePayment() {
+    alert("Thanh toán thành công!");
+    cart = [];
+    localStorage.removeItem('cart');
+    localStorage.removeItem('totalPrice');
+    window.location.href = 'index.html';
+}
+
+// Tải thông tin giỏ hàng lên trang thanh toán
+document.addEventListener("DOMContentLoaded", function() {
+    const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
+    const storedTotalPrice = localStorage.getItem('totalPrice') || 0;
+
+    const cartItems = document.getElementById('cart-items');
+    const total = document.getElementById('total');
+
+    storedCart.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.service}: ${item.price.toLocaleString()} VNĐ`;
+        cartItems.appendChild(li);
+    });
+
+    total.textContent = `Tổng cộng: ${storedTotalPrice.toLocaleString()} VNĐ`;
+});
+
+// Quay lại trang chính
+function goBack() {
+    window.location.href = 'index.html';
+}
+
+// Xử lý tải lên hình ảnh
+let uploadedImageData = '';
+
+function uploadImage() {
+    const input = document.getElementById('imageUpload');
+    const uploadedImageContainer = document.getElementById('uploadedImageContainer');
+
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            uploadedImageData = e.target.result;
+
+            const img = document.createElement('img');
+            img.src = uploadedImageData;
+            img.alt = 'Hình Ảnh Đã Tải Lên';
+            img.style.maxWidth = '300px';
+            img.style.marginTop = '10px';
+
+            uploadedImageContainer.innerHTML = '';
+            uploadedImageContainer.appendChild(img);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        alert("Vui lòng chọn một tệp hình ảnh.");
     }
 }
 
-async function withdraw() {
-    try {
-        contract = new web3.eth.Contract(abi, contractAddress);
-        await contract.methods.withdraw().send({ from: userAccount });
-        alert('Rút BNB thành công!');
-    } catch (error) {
-        console.error(error);
-        alert('Lỗi khi rút BNB!');
+// Hiển thị thông báo cho người dùng
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.style.position = 'fixed';
+    notification.style.bottom = '20px';
+    notification.style.right = '20px';
+    notification.style.backgroundColor = '#4CAF50';
+    notification.style.color = 'white';
+    notification.style.padding = '10px 20px';
+    notification.style.borderRadius = '5px';
+    notification.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.2)';
+    notification.style.animation = 'slideIn 0.5s forwards';
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.style.animation = 'fadeOut 0.5s forwards';
+        setTimeout(() => notification.remove(), 500);
+    }, 2000);
+}
+
+// Animation cho thông báo
+const style = document.createElement('style');
+style.innerHTML = `
+@keyframes slideIn {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
     }
 }
 
-document.getElementById('connectButton').onclick = connectWallet;
-document.getElementById('mintButton').onclick = mintGJTokens;
-document.getElementById('withdrawButton').onclick = withdraw;
-
-window.onload = connectWallet; // Kết nối ví khi tải trang
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+`;
+document.head.appendChild(style);

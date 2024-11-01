@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dịch Vụ Mua Bán Sao Telegram</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Mua Bán Sao Telegram</h1>
+    </header>
+    <main>
+        <section id="services">
+            <h2>Dịch Vụ</h2>
+            <div class="service">
+                <h3>100 Stars</h3>
+                <p>Giá: 45.000 VNĐ</p>
+                <button onclick="addToCart('100 Stars', 45000)">Thêm vào giỏ</button>
+            </div>
+            <div class="service">
+                <h3>250 Stars</h3>
+                <p>Giá: 116.000 VNĐ</p>
+                <button onclick="addToCart('250 Stars', 116000)">Thêm vào giỏ</button>
+            </div>
+            <div class="service">
+                <h3>500 Stars</h3>
+                <p>Giá: 225.000 VNĐ</p>
+                <button onclick="addToCart('500 Stars', 225000)">Thêm vào giỏ</button>
+            </div>
+            <div class="service">
+                <h3>1000 Stars</h3>
+                <p>Giá: 450.000 VNĐ</p>
+                <button onclick="addToCart('1000 Stars', 450000)">Thêm vào giỏ</button>
+            </div>
+            <div class="service">
+                <h3>2500 Stars</h3>
+                <p>Giá: 1.100.000 VNĐ</p>
+                <button onclick="addToCart('2500 Stars', 1100000)">Thêm vào giỏ</button>
+            </div>
+        </section>
+        <section id="cart">
+            <h2>Giỏ Hàng</h2>
+            <ul id="cart-items"></ul>
+            <p id="total"></p>
+            <button onclick="checkout()">Thanh Toán</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Dịch Vụ Mua Bán Sao Telegram. Tất cả quyền lợi được bảo lưu.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
